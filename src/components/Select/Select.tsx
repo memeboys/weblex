@@ -10,12 +10,13 @@ export interface Option {
 
 export interface SelectProps {
   label: string;
+  value: string | null;
+  onChange: (value: string | null) => void;
   options: Option[];
 }
 
-export const Select: FC<SelectProps> = ({ label, options }) => {
+export const Select: FC<SelectProps> = ({ label, value, onChange, options }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentOption, setCurrentOption] = useState<Option | null>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,14 +44,14 @@ export const Select: FC<SelectProps> = ({ label, options }) => {
           <span>{label}</span>
           <ArrowIcon direction={isOpen ? "up" : "down"} />
         </div>
-        <CurrentOption option={currentOption} onClear={() => setCurrentOption(null)} />
+        <CurrentOption option={options.find(x => x.value === value) ?? null} onClear={() => onChange(null)} />
       </div>
       <DropDown
         isOpen={isOpen}
         options={options}
         onOptionSelect={(option) => {
           setIsOpen(false);
-          setCurrentOption(option);
+          onChange(option.value);
         }} />
     </div>
   )

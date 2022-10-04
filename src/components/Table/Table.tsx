@@ -108,12 +108,12 @@ const TableFilters: FC = () => {
         <option value="greaterThan">Больше чем</option>
       </select>
       <input type="text" value={value.value} onChange={(e) => setValue({ ...value, value: e.target.value })} /> */}
-      <Select label="Колонка" options={[
+      <Select label="Колонка" value={value.column} onChange={x => setValue({ ...value, column: x as ColumnKind | null })} options={[
         { value: "name", label: "Название" },
         { value: "quantity", label: "Количество" },
         { value: "distance", label: "Расстояние" },
       ]} />
-      <Select label="Операция" options={[
+      <Select label="Операция" value={value.operation} onChange={x => setValue({ ...value, operation: x as OperationKind | null })} options={[
         { value: "equals", label: "Равно" },
         { value: "contains", label: "Содержит" },
         { value: "lessThan", label: "Меньше чем" },
