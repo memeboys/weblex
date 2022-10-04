@@ -1,8 +1,6 @@
 import {Column, Operation, Order} from '../types/common';
 import {TablePageDto} from '../types/TablePageDto';
 
-const ENDPOINT = process.env['REACT_APP_ENDPOINT'];
-
 export interface FetchDataRequest {
   readonly page: number;
   readonly pageSize: number;
@@ -22,7 +20,7 @@ export interface FilterQuery {
 }
 
 export function fetchData(request: FetchDataRequest): Promise<TablePageDto> {
-  return fetch(`${ENDPOINT}/data?${buildParams(request)}`).then(response =>
+  return fetch(`/api/data?${buildParams(request)}`).then(response =>
     response.json()
   );
 }

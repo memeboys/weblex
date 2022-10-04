@@ -36,6 +36,7 @@ export const TableFilters: FC<TableFiltersProps> = ({onCommit}) => {
     onCommit({column, operation, value});
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceCommitIfNeeded = useCallback(debounce(600, commitIfNeeded), []);
 
   return (
@@ -75,6 +76,11 @@ export const TableFilters: FC<TableFiltersProps> = ({onCommit}) => {
       <Input
         label="Значение"
         value={filters.value}
+        onReturn={value => {
+          const nextFilters: NullableTableFiltersValue = {...filters, value};
+          setFilters(nextFilters);
+          commitIfNeeded(nextFilters);
+        }}
         onChange={value => {
           const nextFilters: NullableTableFiltersValue = {...filters, value};
           setFilters(nextFilters);
