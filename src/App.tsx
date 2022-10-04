@@ -1,23 +1,15 @@
-import './App.css';
+import { FC, useEffect, useState } from "react";
+import { fetchData } from "./api/fetch-data";
+import { Table } from "./components/Table/Table";
+import { TableData } from "./types";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const App: FC = () => {
+  const [data, setData] = useState<TableData | null>(null);
+
+  useEffect(() => {
+    fetchData().then(setData);
+  }, []);
+
+  if (!data) return <span>"Loading..."</span>;
+  return <Table data={data} />
 }
-
-export default App;
