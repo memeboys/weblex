@@ -1,15 +1,13 @@
 import {FC, useCallback, useState} from 'react';
 import {Input} from '../../components/Input/Input';
 import {Select} from '../../components/Select/Select';
+import {Column, Operation} from '../../types/common';
 import {debounce} from '../../utils/debounce';
 import styles from './TableFilters.module.scss';
 
-export type ColumnKind = 'name' | 'quantity' | 'distance';
-export type OperationKind = 'equals' | 'contains' | 'lessThan' | 'greaterThan';
-
 export interface TableFiltersValue {
-  column: ColumnKind;
-  operation: OperationKind;
+  column: Column;
+  operation: Operation;
   value: string;
 }
 
@@ -18,8 +16,8 @@ export interface TableFiltersProps {
 }
 
 interface NullableTableFiltersValue {
-  column: ColumnKind | null;
-  operation: OperationKind | null;
+  column: Column | null;
+  operation: Operation | null;
   value: string;
 }
 
@@ -42,7 +40,7 @@ export const TableFilters: FC<TableFiltersProps> = ({onCommit}) => {
 
   return (
     <div className={styles.filters}>
-      <Select<ColumnKind>
+      <Select<Column>
         label="Колонка"
         value={filters.column}
         onChange={column => {
@@ -56,7 +54,7 @@ export const TableFilters: FC<TableFiltersProps> = ({onCommit}) => {
           {value: 'distance', label: 'Расстояние'},
         ]}
       />
-      <Select<OperationKind>
+      <Select<Operation>
         label="Операция"
         value={filters.operation}
         onChange={operation => {

@@ -1,32 +1,45 @@
 import {FC, useEffect, useState} from 'react';
-import {fetchData} from '../../api/fetch-data';
+import {fetchData} from '../../api/fetchData';
 import {Pagination} from '../../components/Pagination/Pagination';
-import {TableData} from '../../types';
+import {TablePageDto} from '../../types/TablePageDto';
 import {Table} from '../Table/Table';
-import {TableFilters} from '../TableFilters/TableFilters';
+import {TableSort} from '../Table/TableHead';
+import {TableFilters, TableFiltersValue} from '../TableFilters/TableFilters';
 import styles from './TablePage.module.scss';
 
 export const TablePage: FC = () => {
-  const [data, setData] = useState<TableData | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState<TablePageDto | null>(null);
+  const [filter, setFilter] = useState<TableFiltersValue | null>(null);
+  const [sort, setSort] = useState<TableSort | null>(null);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetchData().then(setData);
-  }, []);
+    fetchData({
+      page,
+      pageSize: 20,
+      sort,
+      filter,
+    }).then(setData);
+  }, [filter, page, sort]);
 
-  if (!data) return <span>"Loading..."</span>;
+  const handleSortChange = (sort: TableSort | null) => {
+    setSort(sort);
+    setPage(1);
+  };
+
+  if (!data) return <span>Loading...</span>;
   return (
     <div className={styles.tablePage}>
       <div className={styles.titleBar}>
-        <TableFilters onCommit={console.log} />
+        <TableFilters onCommit={setFilter} />
         <Pagination
-          currentPage={currentPage}
-          totalPages={20}
-          onPageChange={setCurrentPage}
+          currentPage={page}
+          totalPages={data.totalPages}
+          onPageChange={setPage}
         />
       </div>
 
-      <Table data={data} />
+      <Table data={data.items} sort={sort} onSortChange={handleSortChange} />
     </div>
   );
 };
