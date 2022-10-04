@@ -1,5 +1,9 @@
-import { FC, useMemo } from 'react';
+import classNames from "classnames";
+import { FC, useMemo, useState } from 'react';
 import { TableData, TableItem } from '../../types';
+import { Input } from "../Input/Input";
+import { Select } from "../Select/Select";
+import { ArrowIcon } from "../SortIcon/ArrowIcon";
 import styles from "./Table.module.scss";
 
 interface TableRowProps {
@@ -18,32 +22,34 @@ const TableRow: FC<TableRowProps> = ({ row }) => {
   )
 }
 
-const SortIcon: FC = () => (
-  <svg className={`${styles.sortIcon} ${styles.ascending}`} viewBox="0 0 11 14" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" clipRule="evenodd" d="M0.52814 0.118329C0.8533 -0.055691 1.24784 -0.0366211 1.5547 0.167949L10.5547 6.16795C10.8329 6.35342 11 6.66565 11 7C11 7.3344 10.8329 7.6466 10.5547 7.8321L1.5547 13.8321C1.24784 14.0366 0.8533 14.0557 0.52814 13.8817C0.20298 13.7077 0 13.3688 0 13V0.999999C0 0.631209 0.20298 0.292349 0.52814 0.118329ZM2 2.86852V11.1315L8.1972 7L2 2.86852Z" />
-  </svg>
-
-)
-
 const TableHead: FC = () => (
   <div className={styles.head}>
     <div className={styles.row}>
       <div className={styles.cell}>Дата</div>
-      <button className={`${styles.cell} ${styles.sortCell}`}>
-        <SortIcon />
-        <span>Название</span>
-      </button>
-      <button className={`${styles.cell} ${styles.sortCell}`}>
-        <SortIcon />
-        <span>Количество</span>
-      </button>
-      <button className={`${styles.cell} ${styles.sortCell}`}>
-        <SortIcon />
-        <span>Расстояние</span>
-      </button>
+      <SortableHeadCell>Название</SortableHeadCell>
+      <SortableHeadCell>Количество</SortableHeadCell>
+      <SortableHeadCell>Расстояние</SortableHeadCell>
     </div>
   </div>
 )
+
+interface SortableHeadCellProps {
+  children: string;
+}
+
+const SortableHeadCell: FC<SortableHeadCellProps> = ({ children }) => {
+  const [isAscending, setIsAscending] = useState(true);
+  const toggleOrder = () => {
+    setIsAscending(!isAscending);
+  }
+
+  return (
+    <button className={classNames(styles.cell, styles.sortCell)} onClick={toggleOrder}>
+      <ArrowIcon direction={isAscending ? "up" : "down"} />
+      <span>{children}</span>
+    </button>
+  )
+}
 
 interface TableBodyProps {
   data: TableData;
@@ -64,9 +70,56 @@ export interface TableProps {
 export const Table: FC<TableProps> = ({ data }) => {
   return (
     <div className={styles.table}>
+      <TableFilters />
       <TableHead />
       <TableBody data={data} />
     </div>
   );
 }
 
+type ColumnKind = "name" | "quantity" | "distance";
+type OperationKind = "equals" | "contains" | "lessThan" | "greaterThan";
+
+interface TableFiltersValue {
+  column: ColumnKind | null;
+  operation: OperationKind | null;
+  value: string;
+}
+
+const TableFilters: FC = () => {
+  const [value, setValue] = useState<TableFiltersValue>({
+    column: null,
+    operation: null,
+    value: ""
+  });
+  return (
+    <div className={styles.filters}>
+      {/* <select value={value.column ?? undefined} onChange={(e) => setValue({ ...value, column: e.target.value as ColumnKind })}>
+        <option disabled selected value=""></option>
+        <option value="name">Название</option>
+        <option value="quantity">Количество</option>
+        <option value="distance">Расстояние</option>
+      </select>
+      <select value={value.operation ?? undefined} onChange={(e) => setValue({ ...value, operation: e.target.value as OperationKind })}>
+        <option disabled selected value=""></option>
+        <option value="equals">Равно</option>
+        <option value="contains">Содержит</option>
+        <option value="lessThan">Меньше чем</option>
+        <option value="greaterThan">Больше чем</option>
+      </select>
+      <input type="text" value={value.value} onChange={(e) => setValue({ ...value, value: e.target.value })} /> */}
+      <Select label="Колонка" options={[
+        { value: "name", label: "Название" },
+        { value: "quantity", label: "Количество" },
+        { value: "distance", label: "Расстояние" },
+      ]} />
+      <Select label="Операция" options={[
+        { value: "equals", label: "Равно" },
+        { value: "contains", label: "Содержит" },
+        { value: "lessThan", label: "Меньше чем" },
+        { value: "greaterThan", label: "Больше чем" },
+      ]} />
+      <Input label="Значение" value={value.value} onChange={x => setValue({ ...value, value: x })} />
+    </div>
+  )
+}

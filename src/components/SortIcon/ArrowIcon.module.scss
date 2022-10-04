@@ -1,0 +1,28 @@
+.sortIcon {
+  display: block;
+  position: relative;
+  width: 0.6rem;
+  min-width: 0.6rem;
+  fill: rgb(0 0 0 / 32%);
+  transition: rotate 240ms ease-in-out, top 240ms ease-in-out;
+
+  &.left {
+    top: 0.12rem;
+    rotate: -180deg;
+  }
+
+  &.up {
+    top: 0;
+    rotate: -90deg;
+  }
+
+  &.right {
+    top: 0rem;
+    rotate: 0deg;
+  }
+
+  &.down {
+    top: 0.12rem;
+    rotate: 90deg;
+  }
+}

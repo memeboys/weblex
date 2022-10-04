@@ -1,62 +1,66 @@
-.table {
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 2fr 4fr 1fr 1fr;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  grid-template-columns: 1fr 2.6fr 1fr 1fr;
+  border-bottom: 1px solid rgb(0 0 0 / 6%);
+}
+
+.sortCell {
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+  gap: 0.3rem;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(0 0 0 / 3%);
+  }
+
+  &:active {
+    background-color: rgb(0 0 0 / 6%);
+  }
 }
 
 .cell {
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  border-right: 1px solid rgb(0 0 0 / 6%);
   padding: 0.6rem 1rem;
   box-sizing: border-box;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  &:last-of-type {
+  &:last-child {
     border-right: 0;
   }
-}
-
-.sortCell {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  gap: 0.2rem;
 }
 
 .head {
   .cell {
     font-weight: 600;
     font-size: 0.86rem;
-    color: rgba(0, 0, 0, 0.32);
+    color: rgb(0 0 0 / 32%);
+
+    span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 }
 
 .body {
   .cell {
-    color: rgba(0, 0, 0, 0.86);
+    color: rgb(0 0 0 / 86%);
   }
 
   .row:last-of-type {
     border-bottom: 0;
-  }
-}
-
-.sortIcon {
-  display: block;
-  position: relative;
-  width: 0.6rem;
-  fill: rgba(0, 0, 0, 0.32);
-
-  &.ascending {
-    rotate: -90deg;
-  }
-
-  &.descending {
-    top: 0.12rem;
-    rotate: 90deg;
   }
 }

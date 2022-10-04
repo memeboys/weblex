@@ -1,0 +1,26 @@
+.button {
+  $size: 1.5rem;
+  width: $size;
+  height: $size;
+  padding: 0.46rem;
+  box-sizing: border-box;
+  border: 0;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: rgb(0 0 0 / 3%);
+  }
+
+  &:active,
+  &:focus {
+    background-color: rgb(0 0 0 / 6%);
+  }
+
+  svg {
+    display: block;
+    stroke: rgb(0 0 0 / 64%);
+  }
+}

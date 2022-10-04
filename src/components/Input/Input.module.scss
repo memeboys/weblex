@@ -1,0 +1,38 @@
+.field {
+  display: inline-block;
+  border: 1px solid rgb(0 0 0 / 6%);
+  border-radius: 0.64rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  box-sizing: border-box;
+  cursor: text;
+
+  span {
+    font-size: 0.86rem;
+    font-weight: 600;
+    height: 100%;
+    color: rgb(0 0 0 / 54%);
+    margin-right: 0.3rem;
+    user-select: none;
+  }
+
+  input {
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    outline: none;
+    color: rgb(0 0 0 / 86%);
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &::selection {
+      background-color: rgb(201 213 250);
+    }
+  }
+
+  &:focus-within {
+    border-color: rgb(125 153 237);
+    outline: rgb(125 153 237) solid 1px;
+  }
+}
