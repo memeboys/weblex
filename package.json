@@ -38,7 +38,8 @@
     "start:client": "react-scripts start",
     "build:client": "react-scripts build",
     "start:server": "webpack --config server/webpack.config.js --watch",
-    "build:server": "webpack --config server/webpack.config.js"
+    "build:server": "webpack --config server/webpack.config.js",
+    "format": "prettier --ignore-unknown --write ."
   },
   "eslintConfig": {
     "extends": [

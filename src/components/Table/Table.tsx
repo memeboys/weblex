@@ -1,17 +1,20 @@
-import classNames from "classnames";
-import { FC, useMemo, useState } from 'react';
-import { TableData, TableItem } from '../../types';
-import { Input } from "../Input/Input";
-import { Select } from "../Select/Select";
-import { ArrowIcon } from "../SortIcon/ArrowIcon";
-import styles from "./Table.module.scss";
+import classNames from 'classnames';
+import {FC, useMemo, useState} from 'react';
+import {TableData, TableItem} from '../../types';
+import {Input} from '../Input/Input';
+import {Select} from '../Select/Select';
+import {ArrowIcon} from '../SortIcon/ArrowIcon';
+import styles from './Table.module.scss';
 
 interface TableRowProps {
   row: TableItem;
 }
 
-const TableRow: FC<TableRowProps> = ({ row }) => {
-  const date = useMemo(() => new Date(row.date).toLocaleDateString(), [row.date])
+const TableRow: FC<TableRowProps> = ({row}) => {
+  const date = useMemo(
+    () => new Date(row.date).toLocaleDateString(),
+    [row.date]
+  );
   return (
     <div className={styles.row} key={row.id}>
       <div className={styles.cell}>{date}</div>
@@ -19,8 +22,8 @@ const TableRow: FC<TableRowProps> = ({ row }) => {
       <div className={styles.cell}>{row.quantity}</div>
       <div className={styles.cell}>{row.distance}</div>
     </div>
-  )
-}
+  );
+};
 
 const TableHead: FC = () => (
   <div className={styles.head}>
@@ -31,43 +34,48 @@ const TableHead: FC = () => (
       <SortableHeadCell>Расстояние</SortableHeadCell>
     </div>
   </div>
-)
+);
 
 interface SortableHeadCellProps {
   children: string;
 }
 
-const SortableHeadCell: FC<SortableHeadCellProps> = ({ children }) => {
+const SortableHeadCell: FC<SortableHeadCellProps> = ({children}) => {
   const [isAscending, setIsAscending] = useState(true);
   const toggleOrder = () => {
     setIsAscending(!isAscending);
-  }
+  };
 
   return (
-    <button className={classNames(styles.cell, styles.sortCell)} onClick={toggleOrder}>
-      <ArrowIcon direction={isAscending ? "up" : "down"} />
+    <button
+      className={classNames(styles.cell, styles.sortCell)}
+      onClick={toggleOrder}
+    >
+      <ArrowIcon direction={isAscending ? 'up' : 'down'} />
       <span>{children}</span>
     </button>
-  )
-}
+  );
+};
 
 interface TableBodyProps {
   data: TableData;
 }
 
-const TableBody: FC<TableBodyProps> = ({ data }) => {
+const TableBody: FC<TableBodyProps> = ({data}) => {
   return (
     <div className={styles.body}>
-      {data.map((item) => <TableRow row={item} key={item.id} />)}
+      {data.map(item => (
+        <TableRow row={item} key={item.id} />
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export interface TableProps {
   data: TableData;
 }
 
-export const Table: FC<TableProps> = ({ data }) => {
+export const Table: FC<TableProps> = ({data}) => {
   return (
     <div className={styles.table}>
       <TableFilters />
@@ -75,10 +83,10 @@ export const Table: FC<TableProps> = ({ data }) => {
       <TableBody data={data} />
     </div>
   );
-}
+};
 
-type ColumnKind = "name" | "quantity" | "distance";
-type OperationKind = "equals" | "contains" | "lessThan" | "greaterThan";
+type ColumnKind = 'name' | 'quantity' | 'distance';
+type OperationKind = 'equals' | 'contains' | 'lessThan' | 'greaterThan';
 
 interface TableFiltersValue {
   column: ColumnKind | null;
@@ -90,7 +98,7 @@ const TableFilters: FC = () => {
   const [value, setValue] = useState<TableFiltersValue>({
     column: null,
     operation: null,
-    value: ""
+    value: '',
   });
   return (
     <div className={styles.filters}>
@@ -108,18 +116,34 @@ const TableFilters: FC = () => {
         <option value="greaterThan">Больше чем</option>
       </select>
       <input type="text" value={value.value} onChange={(e) => setValue({ ...value, value: e.target.value })} /> */}
-      <Select label="Колонка" value={value.column} onChange={x => setValue({ ...value, column: x as ColumnKind | null })} options={[
-        { value: "name", label: "Название" },
-        { value: "quantity", label: "Количество" },
-        { value: "distance", label: "Расстояние" },
-      ]} />
-      <Select label="Операция" value={value.operation} onChange={x => setValue({ ...value, operation: x as OperationKind | null })} options={[
-        { value: "equals", label: "Равно" },
-        { value: "contains", label: "Содержит" },
-        { value: "lessThan", label: "Меньше чем" },
-        { value: "greaterThan", label: "Больше чем" },
-      ]} />
-      <Input label="Значение" value={value.value} onChange={x => setValue({ ...value, value: x })} />
+      <Select
+        label="Колонка"
+        value={value.column}
+        onChange={x => setValue({...value, column: x as ColumnKind | null})}
+        options={[
+          {value: 'name', label: 'Название'},
+          {value: 'quantity', label: 'Количество'},
+          {value: 'distance', label: 'Расстояние'},
+        ]}
+      />
+      <Select
+        label="Операция"
+        value={value.operation}
+        onChange={x =>
+          setValue({...value, operation: x as OperationKind | null})
+        }
+        options={[
+          {value: 'equals', label: 'Равно'},
+          {value: 'contains', label: 'Содержит'},
+          {value: 'lessThan', label: 'Меньше чем'},
+          {value: 'greaterThan', label: 'Больше чем'},
+        ]}
+      />
+      <Input
+        label="Значение"
+        value={value.value}
+        onChange={x => setValue({...value, value: x})}
+      />
     </div>
-  )
-}
+  );
+};

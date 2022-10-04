@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from "react";
-import { fetchData } from "./api/fetch-data";
-import { Table } from "./components/Table/Table";
-import { TableData } from "./types";
+import {FC, useEffect, useState} from 'react';
+import {fetchData} from './api/fetch-data';
+import {Table} from './components/Table/Table';
+import {TableData} from './types';
 
 export const App: FC = () => {
   const [data, setData] = useState<TableData | null>(null);
@@ -11,5 +11,5 @@ export const App: FC = () => {
   }, []);
 
   if (!data) return <span>"Loading..."</span>;
-  return <Table data={data} />
-}
+  return <Table data={data} />;
+};
