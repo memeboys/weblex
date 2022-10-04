@@ -1,21 +1,26 @@
-import {FC, useEffect, useRef, useState} from 'react';
+import {ReactElement, useEffect, useRef, useState} from 'react';
+import {ArrowIcon} from '../ArrowIcon/ArrowIcon';
 import {ClearButton} from '../ClearButton/ClearButton';
-import {ArrowIcon} from '../SortIcon/ArrowIcon';
 import styles from './Select.module.scss';
 
-export interface Option {
-  value: string;
+export interface Option<T> {
+  value: T;
   label: string;
 }
 
-export interface SelectProps {
+export interface SelectProps<T> {
   label: string;
   value: string | null;
-  onChange: (value: string | null) => void;
-  options: Option[];
+  onChange: (value: T | null) => void;
+  options: Option<T>[];
 }
 
-export const Select: FC<SelectProps> = ({label, value, onChange, options}) => {
+export function Select<T>({
+  label,
+  value,
+  onChange,
+  options,
+}: SelectProps<T>): ReactElement {
   const [isOpen, setIsOpen] = useState(false);
   const fieldRef = useRef<HTMLDivElement>(null);
 
@@ -45,29 +50,33 @@ export const Select: FC<SelectProps> = ({label, value, onChange, options}) => {
           <span>{label}</span>
           <ArrowIcon direction={isOpen ? 'up' : 'down'} />
         </div>
-        <CurrentOption
+        <CurrentOption<T>
           option={options.find(x => x.value === value) ?? null}
           onClear={() => onChange(null)}
         />
       </div>
-      <DropDown
+      <DropDown<T>
         isOpen={isOpen}
         options={options}
         onOptionSelect={option => {
           setIsOpen(false);
+          if (option.value === value) return;
           onChange(option.value);
         }}
       />
     </div>
   );
-};
+}
 
-interface CurrentOptionProps {
-  option: Option | null;
+interface CurrentOptionProps<T> {
+  option: Option<T> | null;
   onClear: () => void;
 }
 
-const CurrentOption: FC<CurrentOptionProps> = ({option, onClear}) => {
+function CurrentOption<T>({
+  option,
+  onClear,
+}: CurrentOptionProps<T>): ReactElement | null {
   if (!option) return null;
   return (
     <div className={styles.currentOption}>
@@ -75,15 +84,19 @@ const CurrentOption: FC<CurrentOptionProps> = ({option, onClear}) => {
       <ClearButton onPress={onClear} />
     </div>
   );
-};
-
-interface DropDownProps {
-  isOpen: boolean;
-  options: Option[];
-  onOptionSelect: (option: Option) => void;
 }
 
-const DropDown: FC<DropDownProps> = ({isOpen, options, onOptionSelect}) => {
+interface DropDownProps<T> {
+  isOpen: boolean;
+  options: Option<T>[];
+  onOptionSelect: (option: Option<T>) => void;
+}
+
+function DropDown<T>({
+  isOpen,
+  options,
+  onOptionSelect,
+}: DropDownProps<T>): ReactElement | null {
   if (!isOpen) return null;
   return (
     <div className={styles.dropDown} onClick={e => e.stopPropagation()}>
@@ -91,7 +104,7 @@ const DropDown: FC<DropDownProps> = ({isOpen, options, onOptionSelect}) => {
         <button
           type="button"
           className={styles.option}
-          key={option.value}
+          key={String(option.value)}
           onClick={() => onOptionSelect(option)}
         >
           {option.label}
@@ -99,4 +112,4 @@ const DropDown: FC<DropDownProps> = ({isOpen, options, onOptionSelect}) => {
       ))}
     </div>
   );
-};
+}
