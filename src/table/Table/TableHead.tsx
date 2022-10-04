@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import {FC, useState} from 'react';
-import {ArrowIcon} from '../ArrowIcon/ArrowIcon';
+import {ArrowIcon} from '../../components/ArrowIcon/ArrowIcon';
 import styles from './Table.module.scss';
 
 export const TableHead: FC = () => (

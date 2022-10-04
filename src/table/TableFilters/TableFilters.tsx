@@ -1,9 +1,17 @@
 import {FC, useCallback, useState} from 'react';
+import {Input} from '../../components/Input/Input';
+import {Select} from '../../components/Select/Select';
 import {debounce} from '../../utils/debounce';
-import {Input} from '../Input/Input';
-import {Select} from '../Select/Select';
-import {ColumnKind, OperationKind, TableFiltersValue} from './Table';
-import styles from './Table.module.scss';
+import styles from './TableFilters.module.scss';
+
+export type ColumnKind = 'name' | 'quantity' | 'distance';
+export type OperationKind = 'equals' | 'contains' | 'lessThan' | 'greaterThan';
+
+export interface TableFiltersValue {
+  column: ColumnKind;
+  operation: OperationKind;
+  value: string;
+}
 
 export interface TableFiltersProps {
   onCommit: (filters: TableFiltersValue) => void;
@@ -30,10 +38,7 @@ export const TableFilters: FC<TableFiltersProps> = ({onCommit}) => {
     onCommit({column, operation, value});
   };
 
-  const debounceCommitIfNeeded = useCallback(
-    debounce(1000, commitIfNeeded),
-    []
-  );
+  const debounceCommitIfNeeded = useCallback(debounce(600, commitIfNeeded), []);
 
   return (
     <div className={styles.filters}>
